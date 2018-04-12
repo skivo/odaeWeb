@@ -1,0 +1,76 @@
+﻿@model CodificadorViewModel
+@{
+    ViewData["Title"] = "Usuario";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <h4>Actualizar información de usuario</h4>
+            <hr />
+            <div id="mensaje" class="text-danger">@TempData["Message"]</div>
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="UserId"></label>
+                <input asp-for="UserId" class="form-control" readonly />
+                <span asp-validation-for="UserId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NombreCodificador"></label>
+                <input asp-for="NombreCodificador" class="form-control" />
+                <span asp-validation-for="NombreCodificador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Actualizar</button>
+            <a class="btn btn-default pull-right" id="showPass" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cambiar contraseña <span class="caret"></span></a>
+        </form>
+    </div>
+</div>
+
+<div class="row" id="changePass" style="padding-top:15px; display: none">
+    <div id="changePass" class="well col-md-4">
+        <form asp-action="ChangePassword" method="post">
+            <div class="form-group">
+                <label asp-for="OldPassword"></label>
+                <input asp-for="OldPassword" class="form-control" required />
+                <span asp-validation-for="OldPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NewPassword"></label>
+                <input asp-for="NewPassword" class="form-control" required />
+                <span asp-validation-for="NewPassword" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConfirmPassword"></label>
+                <input asp-for="ConfirmPassword" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Cambiar</button>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script>
+        $('#showPass').on('click', function (e) {
+            if ($('#changePass').is(":visible")){
+                $('#changePass').hide();
+            }
+            else {
+                $('#changePass').show();
+            }
+        });
+
+        $('.btn').click(function (e) {
+            $('#mensaje').empty();
+        });
+    </script>
+
+}

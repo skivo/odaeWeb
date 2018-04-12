@@ -1,0 +1,47 @@
+﻿@model IEnumerable<odaeWeb.Models.DB.UserFaseCodificador>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Codificador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fase)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Codificador.NombreCodificador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fase.NombreFase)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.UserId)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { userId = item.UserId, faseId = item.FaseId, codId = item.CodificadorId }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

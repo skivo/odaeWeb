@@ -1,0 +1,75 @@
+﻿@model odaeWeb.Models.DB.UserFaseCodificador
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>Edit</h2>
+
+<h4>Admin</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CodificadorId" />
+
+            <div class="form-group">
+                <label asp-for="UserId" class="control-label">Usuario</label>
+                <input asp-for="UserId" class="form-control" readonly />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Codificador.NombreCodificador" class="control-label">Nombre</label>
+                <input asp-for="Codificador.NombreCodificador" name="nombreCodificador" class="form-control" />
+                <span asp-validation-for="Codificador.NombreCodificador" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-group">
+                <label asp-for="Codificador.Email" class="control-label">Email</label>
+                <input asp-for="Codificador.Email" name="email" class="form-control" />
+                <span asp-validation-for="Codificador.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="FaseId" class="control-label">Fase</label>
+                <select asp-for="FaseId" class="form-control" asp-items="ViewBag.FaseId"></select>
+                <span asp-validation-for="FaseId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group form-inline">
+                <div class="form-group">
+                    <label asp-for="User.Token" name="token" class="control-label">Token</label>
+                    <input id="inputToken" asp-for="User.Token" name="token" class="form-control" readonly />
+                </div>
+                <div class="form-group">
+                    <input id="generaToken" type="button" class="btn btn-default" value="Generar" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $("#generaToken").click(function () {
+            var url = '@Url.Action("getToken", "Admin")';
+            $.getJSON(url, function (response) {
+                $("#inputToken").val(response);
+            });
+        });
+    </script>
+
+}

@@ -1,0 +1,322 @@
+﻿@model odaeWeb.Models.CodificacionViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+    string objetivoSel = "", htmlList = "";
+}
+
+<div class="row" style="padding-top: 15px;">
+    <div class="col-md-8 text-center">
+        <div class="row" style="padding-bottom: 0px">
+            <ul class="pagination pagination-sm">
+                <li class="page-item">
+                    @if (Model.PrevItem == null)
+                    {
+                        <a class="btn btn-xs disabled">❮</a>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.PrevItem)" asp-route-filter="@(Model.Filtro)">❮</a>
+                    }
+                </li>
+                <li class="page-item">
+                    <a class="page-link" asp-action="Index" asp-route-filter="@(Model.Filtro)">
+                        @(Model.Pos)&nbsp;/&nbsp;@Model.Total
+                    </a>
+                </li>
+                <li class="page-item">
+                    @if (Model.NextItem == null)
+                    {
+                        <a class="btn btn-xs disabled">❯</a>
+                    }
+                    else
+                    {
+                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.NextItem)" asp-route-filter="@(Model.Filtro)">❯</a>
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<hr />
+
+
+    @if ((bool)Model.TieneDuplicado)
+    {
+        var duplicados = ViewData["Duplicados"] as SelectList;
+        int d = duplicados.Count();
+    <div>
+        <div class="col-md-8">
+            <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+                <!-- Indicators -->
+                <ol class="carousel-indicators">
+                    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                    @for (int i = 1; i <= d; i++)
+                    {
+                        <li data-target="#myCarousel" data-slide-to="@i"></li>
+                    }
+                </ol>
+
+                <!-- Wrapper for slides -->
+                <div class="carousel-inner">
+
+                    <div class="item active">
+                        <img class="img-responsive center-block" src="~/images/m/@Model.FileName">
+                        <img style="position: absolute;top: 2px;right: 2px;" border="0" src="~/images/icons/@(Model.Estado + ".png")" alt="">
+                    </div>
+
+                    @foreach (var item in duplicados)
+                    {
+                        <div class="item">
+                            <img class="img-responsive center-block" src="~/images/m/@item.Text">
+                            <img style="position: absolute;top: 2px;right: 2px;" border="0" src="~/images/icons/@(Model.Estado + ".png")" alt="">
+                        </div>
+                    }
+                </div>
+
+                <!-- Left and right controls -->
+                <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    }
+    else
+    {
+        <div>
+            <div class="col-md-8" style="margin-bottom: 15px;">
+                <img class="img-responsive center-block" src="~/images/m/@Model.FileName" alt="@Model.FileName">
+                <img style="position: absolute;top: 2px;right: 17px;" border="0" src="~/images/icons/@(Model.Estado + ".png")" alt="">
+            </div>
+        </div>
+    }
+
+
+    <form id="codForm" asp-action="Edit">
+        <div class="row">
+            <div class="col-md-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="CodificadorId" />
+                <input type="hidden" asp-for="FaseId" />
+                <input type="hidden" asp-for="MaterialId" />
+                <input type="hidden" asp-for="FileName" />
+                <input type="hidden" asp-for="TieneDuplicado" />
+                <input type="hidden" asp-for="Filtro" />
+
+                <div class="form-group">
+                    <label asp-for="NivelId" class="control-label"></label>
+                    <select id="selNivel" asp-for="NivelId" class="form-control" asp-items="ViewBag.NivelId">
+                        @if (Model.NivelId == null)
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
+                    </select>
+                    <span asp-validation-for="NivelId" class="text-danger"></span>
+
+                    <div class="comentario"><input asp-for="NivelComentario" class="form-control" /></div>
+                    <span asp-validation-for="NivelComentario" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4 col-sm-4" style="padding-left: 0px; padding-right: 7px">
+                    <div class="form-group">
+                        <label asp-for="CursoId" class="control-label"></label>
+                        <select id="selCurso" asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId">
+                            @if (Model.CursoId == null)
+                            {
+                                <option value="">Seleccionar...</option>
+                            }
+                        </select>
+                        <span asp-validation-for="CursoId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-8" style="padding-right: 0px;">
+                    <div class="form-group">
+                        <label asp-for="EjeId" class="control-label"></label>
+                        <select id="selEje" asp-for="EjeId" class="form-control" asp-items="ViewBag.EjeId">
+                            @if (Model.EjeId == null)
+                            {
+                                <option value="">Seleccionar...</option>
+                            }
+                        </select>
+                        <span asp-validation-for="EjeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @{
+                    var objetivos =  ViewData["ObjetivoId"] as SelectList;
+                    if (objetivos != null)
+                    {
+                        if (Model.ObjetivoId == null)
+                        {
+                            objetivoSel = "Seleccionar...";
+                        }
+                        foreach (var item in objetivos)
+                        {
+                            if (Model.ObjetivoId != null && item.Value == Model.ObjetivoId.ToString())
+                            {
+                                objetivoSel = item.Value + ". " + item.Text;
+                            }
+                            htmlList += "<li><a class='objetivo' href='#' data-value='" + item.Value + "'>" + item.Value + ". " + item.Text + "</a></li>";
+                        }
+                    }
+                }
+
+                <div class="form-group">
+                    <input type="hidden" data-val="true" id="ObjetivoId" name="ObjetivoId" value="@Model.ObjetivoId">
+                    <label asp-for="ObjetivoId" class="control-label"></label>
+                    <div class="dropdown">
+                        <button id="btn_objetivo" type="button" class="form-control dropdown-toggle text-left ellip" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span id="objetivoTxt" class="ellip">@objetivoSel</span>
+                            <span class="caret pull-right"></span>
+                        </button>
+                        <ul id="listaObjetivos" class="dropdown-menu special dropdown-menu-right" role="menu" aria-labelledby="dropdownMenu" style="display: none;">
+                            @Html.Raw(htmlList)
+                        </ul>
+                    </div>
+                    <span asp-validation-for="ObjetivoId" class="text-danger"></span>
+                    <div class="comentario"><input asp-for="ObjetivoComentario" class="form-control" /></div>
+                    <span asp-validation-for="ObjetivoComentario" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="HabilidadId" class="control-label"></label>
+                    <select id="selHabilidad" asp-for="HabilidadId" class="form-control" asp-items="ViewBag.HabilidadId">
+                        @if (Model.HabilidadId == null)
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
+                    </select>
+                    <span asp-validation-for="HabilidadId" class="text-danger"></span>
+
+                    <div class="comentario"><input asp-for="HabilidadComentario" class="form-control" /></div>
+                    <span asp-validation-for="HabilidadComentario" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="TipoTareaId" class="control-label"></label>
+                    <select  id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
+                        @if (Model.TipoTareaId == null)
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TipoTareaId" class="text-danger"></span>
+
+                    <div class="comentario"><input asp-for="TipoTareaComentario" class="form-control" /></div>
+                    <span asp-validation-for="TipoTareaComentario" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 col-sm-4" style="padding-left: 0px;">
+                    <div class="form-group">
+                        <label asp-for="CorreccionProfesor" class="control-label"></label>
+                        <select id="selCorreccion" asp-for="CorreccionProfesor" class="form-control" asp-items="ViewBag.CorreccionProfesor"></select>
+                        <span asp-validation-for="CorreccionProfesor" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4" style="padding-left: 7px; padding-right: 7px">
+                    <div class="form-group">
+                        <label asp-for="ErrorEjecucion" class="control-label"></label>
+                        <select id="selError" asp-for="ErrorEjecucion" class="form-control" asp-items="ViewBag.ErrorEjecucion"></select>
+                        <span asp-validation-for="ErrorEjecucion" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-4" style="padding-right: 0px;">
+                    <div class="form-group">
+                        <label asp-for="TrabajaDinero" class="control-label"></label>
+                        <select id="selDinero" asp-for="TrabajaDinero" class="form-control" asp-items="ViewBag.TrabajaDinero"></select>
+                        <span asp-validation-for="TrabajaDinero" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Observaciones" class="control-label"></label>
+                    <textarea asp-for="Observaciones" class="form-control"></textarea>
+                    <span asp-validation-for="Observaciones" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </form>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+        <script>
+
+            $('.dropdown').on('show.bs.dropdown', function (e) {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
+            });
+
+            $('.dropdown').on('hide.bs.dropdown', function (e) {
+                $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
+            });
+
+            $('.dropdown').on('click', '.objetivo', function (e) {
+                $('#objetivoTxt').text(this.text);
+                $('#ObjetivoId').attr('value', $(this).attr('data-value'));
+                e.preventDefault();
+            });
+
+
+        function ajaxObjetivos() {
+            var url = '@Url.Action("getObjetivos", "Codificacion")';
+            var listaObjetivos = $('#listaObjetivos');
+            var cursoId = $('#selCurso').val();
+            var ejeId = $('#selEje').val();
+            if (cursoId > 0 && ejeId > 0) {
+                $.getJSON(url, { cursoId: cursoId, ejeId: ejeId }, function (response) {
+                    listaObjetivos.empty();
+                    var listaItem = "";
+                    $.each(response, function (index, item) {
+                        listaItem += "<li><a class='objetivo' href='#' data-value='" + item.value + "'>" + item.value + ". " + item.text + "</a></li>";
+                    });
+                    $('#objetivoTxt').text("Seleccionar...");
+                    $('#ObjetivoId').attr('value', '');
+                    listaObjetivos.html(listaItem);
+                });
+            }
+            enableObjetivos();
+        };
+
+
+        
+
+        function enableObjetivos() {
+            var cursoId = $('#selCurso').val();
+            var ejeId = $('#selEje').val();
+            if (cursoId > 0 && ejeId > 0) {
+                $('#btn_objetivo').prop("disabled", false);
+            }
+            else {
+                $('#btn_objetivo').prop("disabled", "disabled");
+                $('#ObjetivoId').attr('value', '');
+                $('#objetivoTxt').text("");
+            }
+        }
+
+
+        $(document).ready(function () {
+            enableObjetivos();
+        });
+
+        $(function () {
+            $('#selCurso').on('change', function (e) {
+                ajaxObjetivos();
+            });
+
+            $('#selEje').on('change', function (e) {
+                ajaxObjetivos();
+            });
+        });
+
+        </script>
+
+
+    }

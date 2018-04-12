@@ -1,0 +1,113 @@
+﻿@model odaeWeb.Models.DB.Codificacion
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Codificacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NivelComentario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NivelComentario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ObjetivoComentario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ObjetivoComentario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.HabilidadComentario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.HabilidadComentario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoTareaComentario)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TipoTareaComentario)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.CorreccionProfesor)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CorreccionProfesor)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.ErrorEjecucion)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ErrorEjecucion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TrabajaDinero)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TrabajaDinero)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Observaciones)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Observaciones)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Codificador)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Codificador.CodificadorId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Fase)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Fase.NombreFase)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Habilidad)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Habilidad.NombreHabilidad)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Material)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Material.FileName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nivel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nivel.NivelId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Objetivo)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Objetivo.ObjetivoAprendizaje)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoTarea)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TipoTarea.NombreTipoTarea)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CodificadorId" />
+        <input type="hidden" asp-for="FaseId" />
+        <input type="hidden" asp-for="MaterialId" />
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
