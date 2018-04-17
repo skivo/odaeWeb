@@ -8,17 +8,17 @@ namespace odaeWeb.Models
 {
     public class CodificadorViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "El Usuario es obligatorio.")]
         [StringLength(5, ErrorMessage = "The {0} must be {1} characters long.", MinimumLength = 5)]
         [Display(Name = "Usuario")]
         public string UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Se debe introducir el Nombre.")]
         [StringLength(100, ErrorMessage = "El {0} debe tener mínimo de {2} y máximo de {1} caracteres.", MinimumLength = 6)]
         [Display(Name = "Nombre")]
         public string NombreCodificador { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Se debe introducir el Email.")]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }

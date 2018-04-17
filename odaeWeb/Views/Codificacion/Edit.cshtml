@@ -111,20 +111,6 @@
                 <input type="hidden" asp-for="TieneDuplicado" />
                 <input type="hidden" asp-for="Filtro" />
 
-                <div class="form-group">
-                    <label asp-for="NivelId" class="control-label"></label>
-                    <select id="selNivel" asp-for="NivelId" class="form-control" asp-items="ViewBag.NivelId">
-                        @if (Model.NivelId == null)
-                        {
-                            <option value="">Seleccionar...</option>
-                        }
-                    </select>
-                    <span asp-validation-for="NivelId" class="text-danger"></span>
-
-                    <div class="comentario"><input asp-for="NivelComentario" class="form-control" /></div>
-                    <span asp-validation-for="NivelComentario" class="text-danger"></span>
-                </div>
-
                 <div class="col-md-4 col-sm-4" style="padding-left: 0px; padding-right: 7px">
                     <div class="form-group">
                         <label asp-for="CursoId" class="control-label"></label>
@@ -185,8 +171,19 @@
                     <div class="comentario"><input asp-for="ObjetivoComentario" class="form-control" /></div>
                     <span asp-validation-for="ObjetivoComentario" class="text-danger"></span>
                 </div>
-
                 <div class="form-group">
+                    <label asp-for="TipoTareaId" class="control-label"></label>
+                    <select  id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
+                        @if (Model.TipoTareaId == null)
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
+                    </select>
+                    <span asp-validation-for="TipoTareaId" class="text-danger"></span>
+
+                    <div class="comentario"><input asp-for="TipoTareaComentario" class="form-control" /></div>
+                    <span asp-validation-for="TipoTareaComentario" class="text-danger"></span>
+                </div>                <div class="form-group">
                     <label asp-for="HabilidadId" class="control-label"></label>
                     <select id="selHabilidad" asp-for="HabilidadId" class="form-control" asp-items="ViewBag.HabilidadId">
                         @if (Model.HabilidadId == null)
@@ -200,17 +197,17 @@
                     <span asp-validation-for="HabilidadComentario" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="TipoTareaId" class="control-label"></label>
-                    <select  id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
-                        @if (Model.TipoTareaId == null)
+                    <label asp-for="NivelId" class="control-label"></label>
+                    <select id="selNivel" asp-for="NivelId" class="form-control" asp-items="ViewBag.NivelId">
+                        @if (Model.NivelId == null)
                         {
                             <option value="">Seleccionar...</option>
                         }
                     </select>
-                    <span asp-validation-for="TipoTareaId" class="text-danger"></span>
+                    <span asp-validation-for="NivelId" class="text-danger"></span>
 
-                    <div class="comentario"><input asp-for="TipoTareaComentario" class="form-control" /></div>
-                    <span asp-validation-for="TipoTareaComentario" class="text-danger"></span>
+                    <div class="comentario"><input asp-for="NivelComentario" class="form-control" /></div>
+                    <span asp-validation-for="NivelComentario" class="text-danger"></span>
                 </div>
                 <div class="col-md-4 col-sm-4" style="padding-left: 0px;">
                     <div class="form-group">

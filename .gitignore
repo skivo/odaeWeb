@@ -259,3 +259,6 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/odaeWeb/wwwroot/images/m
+/odaeWeb/Properties/PublishProfiles/CustomProfile.pubxml
+/odaeWeb/appsettings.Production.json

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using odaeWeb.Models.DB;
+using odaeWeb.Helpers;
 
 namespace odaeWeb.Controllers
 {
@@ -97,7 +98,7 @@ namespace odaeWeb.Controllers
 
         public JsonResult getToken() // its a GET, not a POST
         {
-            return Json(Guid.NewGuid());
+            return Json(Tools.getToken());
         }
 
         // POST: UserFaseCodificadors/Edit/5

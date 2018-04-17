@@ -34,10 +34,11 @@ namespace odaeWeb
                 options.SlidingExpiration = true;
 
             });
-            services.Configure<MvcOptions>(options =>
-            {
-                options.Filters.Add(new RequireHttpsAttribute());
-            });
+            //services.Configure<MvcOptions>(options =>
+            //{
+            //    options.Filters.Add(new RequireHttpsAttribute());
+            //});
+            services.AddSingleton(Configuration.GetSection("OdaeConfig").Get<OdaeConfig>());
 
         }
 

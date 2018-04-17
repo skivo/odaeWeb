@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
@@ -10,6 +12,7 @@ using odaeWeb.Helpers;
 using odaeWeb.Models;
 using odaeWeb.Models.DB;
 
+
 namespace odaeWeb.Controllers
 {
 
@@ -18,9 +21,12 @@ namespace odaeWeb.Controllers
 
         private readonly odaeDBContext _context;
 
-        public AccountController(odaeDBContext context)
+        private readonly OdaeConfig _config;
+
+        public AccountController(odaeDBContext context, OdaeConfig odaeconfig)
         {
             _context = context;
+            _config = odaeconfig;
         }
 
         public async Task<IActionResult> Logout()
@@ -55,6 +61,10 @@ namespace odaeWeb.Controllers
             return NotFound();
         }
 
+        public IActionResult ForgotPassword()
+        {
+            return View(new ForgotPasswordViewModel());
+        }
 
         public IActionResult Codificador()
         {
@@ -237,12 +247,83 @@ namespace odaeWeb.Controllers
 
         private User LoginUser(string username, string password)
         {
-            //As an example. This method would go to our data store and validate that the combination is correct. 
-            //For now just return true. 
-
             var usuario = _context.User.FirstOrDefault(u => u.UserId == username && u.Password == Cripto.HashPassword(password));
-
             return usuario;
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(string Username)
+        {
+            User usuario = null;
+            string email = "";
+            if (Username.Length == 5)
+            {
+                usuario = _context.User.FirstOrDefault(u => u.UserId == Username);
+                if (usuario != null)
+                {
+                    var userfasecod = await _context.UserFaseCodificador.Where(f => f.UserId == usuario.UserId).SingleOrDefaultAsync();
+                    if (userfasecod != null)
+                    {
+                        var codificador = await _context.Codificador.Where(e => e.CodificadorId == userfasecod.CodificadorId).SingleOrDefaultAsync();
+                        if (codificador != null)
+                        {
+                            email = codificador.Email;
+                        }
+                    }
+                }
+            }
+            if (usuario == null)
+            {
+                if (Tools.IsValidEmail(Username))
+                {
+                    var codificador = await _context.Codificador.Where(e => e.Email == Username).SingleOrDefaultAsync();
+                    if (codificador != null)
+                    {
+                        var userfasecod = await _context.UserFaseCodificador.Where(f => f.CodificadorId == codificador.CodificadorId).SingleOrDefaultAsync();
+                        if (userfasecod != null)
+                        {
+                            usuario = await _context.User.Where(u => u.UserId == userfasecod.UserId).SingleOrDefaultAsync();
+                            if (usuario != null)
+                            {
+                                email = Username;
+                            }
+                        }
+                    }
+                }
+            }
+            if (email != "")
+            {
+                string token = Tools.getToken();
+                usuario.Token = token;
+                usuario.TokenExpiration = DateTime.Now.AddDays(2);
+                _context.Attach(usuario);
+                _context.Entry(usuario).Property(x => x.Token).IsModified = true;
+                _context.Entry(usuario).Property(x => x.TokenExpiration).IsModified = true;
+                await _context.SaveChangesAsync();
+                HttpResponseMessage response = await SendMailResetPassword(email, usuario.UserId, token);
+            }
+            TempData["Message"] = "MailSent";
+            return View(new ForgotPasswordViewModel { Username = Username } );
+        }
+
+
+        private async Task<HttpResponseMessage> SendMailResetPassword(string email, string usuario, string token)
+        {
+            string mailbody = String.Format(_config.passrecovery, usuario, token);
+            using (var client = new HttpClient { BaseAddress = new Uri(_config.baseurl) })
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(_config.apikey)));
+                var content = new FormUrlEncodedContent(new[]
+                {
+                    new KeyValuePair<string, string>("from", _config.noreply),
+                    new KeyValuePair<string, string>("to", email),
+                    new KeyValuePair<string, string>("subject", "Recuperación de contraseña"),
+                    new KeyValuePair<string, string>("html", mailbody)
+                });
+                return await client.PostAsync(_config.requesturl, content).ConfigureAwait(false);
+            }
         }
     }
 }
