@@ -100,7 +100,7 @@ namespace odaeWeb.Models
         [Display(Name = "Nivel demanda cognitiva")]
         public int? NivelId { get; set; }
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El comentario puede tener un máximo de {1} caracteres.")]
         public string NivelComentario { get; set; }
 
         [Display(Name = "Curso")]
@@ -112,19 +112,19 @@ namespace odaeWeb.Models
         [Display(Name = "Objetivo de aprendizaje")]
         public int? ObjetivoId { get; set; }
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El comentario puede tener un máximo de {1} caracteres.")]
         public string ObjetivoComentario { get; set; }
 
         [Display(Name = "Habilidad")]
         public int? HabilidadId { get; set; }
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El comentario puede tener un máximo de {1} caracteres.")]
         public string HabilidadComentario { get; set; }
 
         [Display(Name = "Tipo de tarea")]
         public int? TipoTareaId { get; set; }
 
-        [StringLength(255)]
+        [StringLength(255, ErrorMessage = "El comentario puede tener un máximo de {1} caracteres.")]
         public string TipoTareaComentario { get; set; }
 
         [Display(Name = "Corrección")]
@@ -136,7 +136,7 @@ namespace odaeWeb.Models
         [Display(Name = "Trabaja dinero")]
         public bool? TrabajaDinero { get; set; }
 
-        [StringLength(2000)]
+        [StringLength(255, ErrorMessage = "{0} puede tener un máximo de {1} caracteres.")]
         [Display(Name = "Observaciones")]
         public string Observaciones { get; set; }
 
