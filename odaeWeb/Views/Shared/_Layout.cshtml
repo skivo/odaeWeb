@@ -38,7 +38,8 @@
 
                     @if (User.Identity.IsAuthenticated)
                     {
-                        if((((ClaimsIdentity)User.Identity).GetSpecificClaim(ClaimTypes.Role)) == "2")
+                        var rol = ((ClaimsIdentity)User.Identity).GetSpecificClaim(ClaimTypes.Role);
+                        if (rol == "1" || rol == "2")
                         {
                             <ul class="nav navbar-nav">
                                 <li><a asp-area="" asp-controller="Codificacion" asp-action="Index">Lista de imágenes</a></li>

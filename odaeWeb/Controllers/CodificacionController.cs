@@ -16,7 +16,7 @@ using System.Data.SqlClient;
 
 namespace odaeWeb.Controllers
 {
-    [Authorize(Roles ="2")]
+    [Authorize(Roles ="1,2")]
     public class CodificacionController : Controller
     {
         private readonly odaeDBContext _context;
@@ -119,7 +119,7 @@ namespace odaeWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("CodificadorId,FaseId,MaterialId,FileName,TieneDuplicado,NivelId,NivelComentario,CursoId,EjeId,ObjetivoId,ObjetivoComentario,HabilidadId,HabilidadComentario,TipoTareaId,TipoTareaComentario,CorreccionProfesor,ErrorEjecucion,TrabajaDinero,Observaciones,Filtro")] CodificacionViewModel codificacion)
+        public async Task<IActionResult> Edit([Bind("CodificadorId,FaseId,MaterialId,FileName,TieneDuplicado,NivelId,NivelComentario,CursoId,EjeId,ObjetivoId,ObjetivoComentario,HabilidadId,HabilidadComentario,TipoTareaId,TipoTareaComentario,CorreccionProfesor,ErrorEjecucion,TrabajaDinero,ErrorDiseno,Observaciones,Filtro")] CodificacionViewModel codificacion)
         {
             if (codificacion == null)
             {
@@ -188,29 +188,7 @@ namespace odaeWeb.Controllers
             ViewData["HabilidadId"] = new SelectList(_context.Habilidad, "HabilidadId", "NombreHabilidad", codificacion.HabilidadId);
             ViewData["TipoTareaId"] = new SelectList(_context.TipoTarea, "TipoTareaId", "NombreTipoTarea", codificacion.TipoTareaId);
 
-            var SelSiNo = new[]
-                {
-                    new { valor = "", texto = "Seleccionar..." },
-                    new { valor = "True", texto = "Sí" },
-                    new { valor = "False", texto = "No" }
-                };
-
-            var SiNo = new[]
-                {
-                    new { valor = "True", texto = "Sí" },
-                    new { valor = "False", texto = "No" }
-                };
-
-            var Tmp = (codificacion.CorreccionProfesor == null) ? SelSiNo : SiNo;
-            ViewData["CorreccionProfesor"] = new SelectList(Tmp, "valor", "texto", codificacion.CorreccionProfesor);
-
-            Tmp = (codificacion.ErrorEjecucion == null) ? SelSiNo : SiNo;
-            ViewData["ErrorEjecucion"] = new SelectList(Tmp, "valor", "texto", codificacion.ErrorEjecucion);
-
-            Tmp = (codificacion.TrabajaDinero == null) ? SelSiNo : SiNo;
-            ViewData["TrabajaDinero"] = new SelectList(Tmp, "valor", "texto", codificacion.TrabajaDinero);
-
-            if ((bool)codificacion.TieneDuplicado)
+             if ((bool)codificacion.TieneDuplicado)
             {
                 var duplicados = await _context.Material.Where(d => d.Original == codificacion.MaterialId).ToListAsync();
                 ViewData["Duplicados"] = new SelectList(duplicados, "MaterialId", "FileName");

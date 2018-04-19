@@ -22,6 +22,7 @@ namespace odaeWeb.Models.DB
         public bool? CorreccionProfesor { get; set; }
         public bool? ErrorEjecucion { get; set; }
         public bool? TrabajaDinero { get; set; }
+        public bool? ErrorDiseno { get; set; }
         public string Observaciones { get; set; }
         public int Estado { get; set; }
         public int RowIndex { get; set; }

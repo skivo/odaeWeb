@@ -5,6 +5,15 @@
     string objetivoSel = "", htmlList = "";
 }
 
+<style>
+
+    input.checknull {
+        opacity: 0.3;
+        filter: alpha(opacity=30);
+    }
+
+</style>
+
 <div class="row" style="padding-top: 15px;">
     <div class="col-md-8 text-center">
         <div class="row" style="padding-bottom: 0px">
@@ -111,48 +120,48 @@
                 <input type="hidden" asp-for="TieneDuplicado" />
                 <input type="hidden" asp-for="Filtro" />
 
-                <div class="col-md-4 col-sm-4" style="padding-left: 0px; padding-right: 7px">
+                <div class="col-xs-4" style="padding-left: 0px; padding-right: 7px">
                     <div class="form-group">
                         <label asp-for="CursoId" class="control-label"></label>
                         <select id="selCurso" asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId">
                             @if (Model.CursoId == null)
-                            {
-                                <option value="">Seleccionar...</option>
-                            }
+                {
+                    <option value="">Seleccionar...</option>
+    }
                         </select>
                         <span asp-validation-for="CursoId" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="col-md-8 col-sm-8" style="padding-right: 0px;">
+                <div class="col-xs-8" style="padding-right: 0px;">
                     <div class="form-group">
                         <label asp-for="EjeId" class="control-label"></label>
                         <select id="selEje" asp-for="EjeId" class="form-control" asp-items="ViewBag.EjeId">
                             @if (Model.EjeId == null)
-                            {
-                                <option value="">Seleccionar...</option>
-                            }
+                {
+                    <option value="">Seleccionar...</option>
+    }
                         </select>
                         <span asp-validation-for="EjeId" class="text-danger"></span>
                     </div>
                 </div>
 
                 @{
-                    var objetivos =  ViewData["ObjetivoId"] as SelectList;
-                    if (objetivos != null)
-                    {
-                        if (Model.ObjetivoId == null)
-                        {
-                            objetivoSel = "Seleccionar...";
-                        }
-                        foreach (var item in objetivos)
-                        {
-                            if (Model.ObjetivoId != null && item.Value == Model.ObjetivoId.ToString())
-                            {
-                                objetivoSel = item.Value + ". " + item.Text;
-                            }
-                            htmlList += "<li><a class='objetivo' href='#' data-value='" + item.Value + "'>" + item.Value + ". " + item.Text + "</a></li>";
-                        }
-                    }
+        var objetivos = ViewData["ObjetivoId"] as SelectList;
+        if (objetivos != null)
+        {
+            if (Model.ObjetivoId == null)
+            {
+                objetivoSel = "Seleccionar...";
+            }
+            foreach (var item in objetivos)
+            {
+                if (Model.ObjetivoId != null && item.Value == Model.ObjetivoId.ToString())
+                {
+                    objetivoSel = item.Value + ". " + item.Text;
+                }
+                htmlList += "<li><a class='objetivo' href='#' data-value='" + item.Value + "'>" + item.Value + ". " + item.Text + "</a></li>";
+            }
+        }
                 }
 
                 <div class="form-group">
@@ -173,11 +182,11 @@
                 </div>
                 <div class="form-group">
                     <label asp-for="TipoTareaId" class="control-label"></label>
-                    <select  id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
+                    <select id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
                         @if (Model.TipoTareaId == null)
-                        {
-                            <option value="">Seleccionar...</option>
-                        }
+            {
+                <option value="">Seleccionar...</option>
+}
                     </select>
                     <span asp-validation-for="TipoTareaId" class="text-danger"></span>
 
@@ -187,9 +196,9 @@
                     <label asp-for="HabilidadId" class="control-label"></label>
                     <select id="selHabilidad" asp-for="HabilidadId" class="form-control" asp-items="ViewBag.HabilidadId">
                         @if (Model.HabilidadId == null)
-                        {
-                            <option value="">Seleccionar...</option>
-                        }
+            {
+                <option value="">Seleccionar...</option>
+}
                     </select>
                     <span asp-validation-for="HabilidadId" class="text-danger"></span>
 
@@ -200,36 +209,75 @@
                     <label asp-for="NivelId" class="control-label"></label>
                     <select id="selNivel" asp-for="NivelId" class="form-control" asp-items="ViewBag.NivelId">
                         @if (Model.NivelId == null)
-                        {
-                            <option value="">Seleccionar...</option>
-                        }
+            {
+                <option value="">Seleccionar...</option>
+}
                     </select>
                     <span asp-validation-for="NivelId" class="text-danger"></span>
 
                     <div class="comentario"><input asp-for="NivelComentario" class="form-control" /></div>
                     <span asp-validation-for="NivelComentario" class="text-danger"></span>
                 </div>
-                <div class="col-md-4 col-sm-4" style="padding-left: 0px;">
+
+                <div class="col-xs-6 text-center">
                     <div class="form-group">
-                        <label asp-for="CorreccionProfesor" class="control-label"></label>
-                        <select id="selCorreccion" asp-for="CorreccionProfesor" class="form-control" asp-items="ViewBag.CorreccionProfesor"></select>
-                        <span asp-validation-for="CorreccionProfesor" class="text-danger"></span>
+                        <input type="text" asp-for="CorreccionProfesor" style="display: none" />
+                        <label asp-for="CorreccionProfesor"></label>
+                        @if (Model.CorreccionProfesor == null)
+                        {
+                            <input type="checkbox" class="checknull"/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.CorreccionProfesor" />
+                        }
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-4" style="padding-left: 7px; padding-right: 7px">
+
+                <div class="col-xs-6 text-center">
                     <div class="form-group">
-                        <label asp-for="ErrorEjecucion" class="control-label"></label>
-                        <select id="selError" asp-for="ErrorEjecucion" class="form-control" asp-items="ViewBag.ErrorEjecucion"></select>
-                        <span asp-validation-for="ErrorEjecucion" class="text-danger"></span>
+                        <input type="text" asp-for="ErrorEjecucion" style="display: none" />
+                        <label asp-for="ErrorEjecucion"></label>
+                        @if (Model.ErrorEjecucion == null)
+                        {
+                            <input type="checkbox" class="checknull"/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorEjecucion" />
+                        }
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-4" style="padding-right: 0px;">
+                <div class="col-xs-6 text-center">
                     <div class="form-group">
-                        <label asp-for="TrabajaDinero" class="control-label"></label>
-                        <select id="selDinero" asp-for="TrabajaDinero" class="form-control" asp-items="ViewBag.TrabajaDinero"></select>
-                        <span asp-validation-for="TrabajaDinero" class="text-danger"></span>
+                        <input type="text" asp-for="TrabajaDinero" style="display: none" />
+                        <label asp-for="TrabajaDinero"></label>
+                        @if (Model.TrabajaDinero == null)
+                        {
+                            <input type="checkbox" class="checknull"/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.TrabajaDinero" />
+                        }
                     </div>
                 </div>
+
+                <div class="col-xs-6 text-center">
+                    <div class="form-group">
+                        <input type="text" asp-for="ErrorDiseno" style="display: none" />
+                        <label asp-for="ErrorDiseno"></label>
+                        @if (Model.ErrorDiseno == null)
+                        {
+                            <input type="checkbox" class="checknull"/>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorDiseno" />
+                        }
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label asp-for="Observaciones" class="control-label"></label>
                     <textarea asp-for="Observaciones" class="form-control"></textarea>
@@ -259,6 +307,26 @@
                 $('#objetivoTxt').text(this.text);
                 $('#ObjetivoId').attr('value', $(this).attr('data-value'));
                 e.preventDefault();
+            });
+
+
+
+            $('.checknull').click( function (e) {
+                if ($(this).hasClass('nocheck')) {
+                    $(this).prop('checked', true);
+                    $(this).removeClass('nocheck');
+                    $(this).parent().children(':first-child').val('True');
+                }
+                else {
+                    $(this).prop('checked', false);
+                    $(this).addClass('nocheck');
+                    $(this).parent().children(':first-child').val('False');
+                }
+                $(this).removeClass('checknull');
+            });
+
+            $('.checknotnull').change(function (e) {
+                $(this).parent().children(':first-child').val($(this).prop('checked'));
             });
 
 

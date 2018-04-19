@@ -94,7 +94,7 @@ namespace odaeWeb.Controllers
                     string faseId = "";
                     string email = "";
 
-                    if (user.ProfileId == 2)
+                    if (user.ProfileId == 1 || user.ProfileId == 2)
                     {
                         var userfasecod = _context.UserFaseCodificador.FirstOrDefault(u => u.UserId == user.UserId);
                         var codificador = _context.Codificador.FirstOrDefault(c => c.CodificadorId == userfasecod.CodificadorId);

@@ -34,6 +34,7 @@ namespace odaeWeb.Models
             CorreccionProfesor = codificacion.CorreccionProfesor;
             ErrorEjecucion = codificacion.ErrorEjecucion;
             TrabajaDinero = codificacion.TrabajaDinero;
+            ErrorDiseno = codificacion.ErrorDiseno;
             Observaciones = codificacion.Observaciones;
             Estado = codificacion.Estado;
             Filtro = filter;
@@ -53,12 +54,13 @@ namespace odaeWeb.Models
             if (CorreccionProfesor != null) i++;
             if (ErrorEjecucion != null) i++;
             if (TrabajaDinero != null) i++;
+            if (ErrorDiseno != null) i++;
             if (Observaciones != null) i++;
 
             if (i < 2) Estado = i;
-            else if (i < 3) Estado = 1;
-            else if (i < 6) Estado = 2;
-            else if (i < 8) Estado = 3;
+            else if (i < 4) Estado = 1;
+            else if (i < 7) Estado = 2;
+            else if (i < 9) Estado = 3;
             else Estado = 4;
         }
 
@@ -82,6 +84,7 @@ namespace odaeWeb.Models
                 CorreccionProfesor = this.CorreccionProfesor,
                 ErrorEjecucion = this.ErrorEjecucion,
                 TrabajaDinero = this.TrabajaDinero,
+                ErrorDiseno = this.ErrorDiseno,
                 Observaciones = this.Observaciones,
                 Estado = this.Estado
             };
@@ -135,6 +138,9 @@ namespace odaeWeb.Models
 
         [Display(Name = "Trabaja dinero")]
         public bool? TrabajaDinero { get; set; }
+
+        [Display(Name = "Error diseño")]
+        public bool? ErrorDiseno { get; set; }
 
         [StringLength(255, ErrorMessage = "{0} puede tener un máximo de {1} caracteres.")]
         [Display(Name = "Observaciones")]
