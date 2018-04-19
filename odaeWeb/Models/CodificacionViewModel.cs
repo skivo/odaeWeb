@@ -100,6 +100,7 @@ namespace odaeWeb.Models
         [Display(Name = "Nivel demanda cognitiva")]
         public int? NivelId { get; set; }
 
+        [StringLength(255)]
         public string NivelComentario { get; set; }
 
         [Display(Name = "Curso")]
@@ -111,16 +112,19 @@ namespace odaeWeb.Models
         [Display(Name = "Objetivo de aprendizaje")]
         public int? ObjetivoId { get; set; }
 
+        [StringLength(255)]
         public string ObjetivoComentario { get; set; }
 
         [Display(Name = "Habilidad")]
         public int? HabilidadId { get; set; }
 
+        [StringLength(255)]
         public string HabilidadComentario { get; set; }
 
         [Display(Name = "Tipo de tarea")]
         public int? TipoTareaId { get; set; }
 
+        [StringLength(255)]
         public string TipoTareaComentario { get; set; }
 
         [Display(Name = "Corrección")]
