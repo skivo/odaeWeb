@@ -1,4 +1,9 @@
-﻿img.resaltar:hover {
+﻿input.checknull {
+    opacity: 0.3;
+    filter: alpha(opacity=30);
+}
+
+img.resaltar:hover {
     border: 2px solid #00afff;
 }
 
