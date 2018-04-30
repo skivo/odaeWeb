@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace odaeWeb.Models
 {
-    public class CodificadorViewModel
+    public class CodificadorViewModel : BaseViewModel
     {
         [Required(ErrorMessage = "El Usuario es obligatorio.")]
         [StringLength(5, ErrorMessage = "The {0} must be {1} characters long.", MinimumLength = 5)]

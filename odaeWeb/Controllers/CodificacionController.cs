@@ -22,6 +22,7 @@ namespace odaeWeb.Controllers
         private readonly odaeDBContext _context;
         private int _codificador;
         private int _fase;
+        private BaseViewModel _baseVM;
 
         public CodificacionController(odaeDBContext context)
         {
@@ -35,73 +36,92 @@ namespace odaeWeb.Controllers
             return usuario.UserActivo;
         }
 
-        private bool getFaseCodificador()
+        private bool IsFaseActive(int faseId)
+        {
+            var fase = _context.Fase.FirstOrDefault(f => f.FaseId == faseId);
+            return fase.FaseActiva;
+        }
+
+        private void setFaseActual()
+        {
+            var identity = (ClaimsIdentity)HttpContext.User.Identity;
+            Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.Version), out _fase);
+        }
+
+        private async Task<bool> getFaseCodificador()
         {
             var identity = (ClaimsIdentity)HttpContext.User.Identity;
             string userId = identity.GetSpecificClaim(ClaimTypes.Sid);
-            if (IsUserActive(userId) && Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.UserData), out _codificador) && Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.Version), out _fase))
+            Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.Role), out int perfil);
+            if (IsUserActive(userId) && Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.Version), out _fase) && Int32.TryParse(identity.GetSpecificClaim(ClaimTypes.UserData), out _codificador))
             {
+                _baseVM = new BaseViewModel
+                {
+                    UserId = userId,
+                    Perfil = perfil,
+                    FaseActual = _fase,
+                    FaseSel = _fase,
+                    Fases = await _context.Fase.Where(a => a.FaseActiva == true).OrderByDescending(x => x.FaseId).ToListAsync()
+                };
                 return true;
             }
-            else RedirectToAction("Logout", "Account");
             return false;
         }
 
 
         // GET: Codificacion
-        public async Task<IActionResult> Index(int? page, int filter = -1)
+        public async Task<IActionResult> Index(int? page, int? fase, int filter = -1)
         {
-            getFaseCodificador();
-            var imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == _fase).OrderBy(o => o.RowIndex).Include(m => m.Material);
-            if (filter == 2)
+            if (await getFaseCodificador())
             {
-                imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == _fase && c.Estado > 0 && c.Estado < 4).OrderBy(o => o.RowIndex).Include(m => m.Material);
-            }
-            else if (filter != -1)
-            {
-                imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == _fase && c.Estado == filter).OrderBy(o => o.RowIndex).Include(m => m.Material);
-            }
-            //var estados = imagenesCodificador.GroupBy(p => p.Estado).Select(g => new { name = g.Key, count = g.Count() }).ToListAsync();
-            //var count0 = await imagenesCodificador.Where(o => o.Estado == 0).CountAsync();
-            //var count1 = await imagenesCodificador.Where(o => o.Estado == 1 || o.Estado == 2 || o.Estado == 3).CountAsync();
-            //var count2 = await imagenesCodificador.Where(o => o.Estado == 4).CountAsync();
-            //var total = count0 + count1 + count2;
-
-            ViewData["Filtros"] = new SelectList(new[]
+                var imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == (fase ?? _fase)).OrderBy(o => o.RowIndex).Include(m => m.Material);
+                if (filter == 2)
                 {
+                    imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == (fase ?? _fase) && c.Estado > 0 && c.Estado < 4).OrderBy(o => o.RowIndex).Include(m => m.Material);
+                }
+                else if (filter != -1)
+                {
+                    imagenesCodificador = _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == (fase ?? _fase) && c.Estado == filter).OrderBy(o => o.RowIndex).Include(m => m.Material);
+                }
+
+                ViewData["Filtros"] = new SelectList(new[]
+                    {
                     new { valor = "-1", texto = "Mostrar todo"},
                     new { valor = "0", texto = "Sin codificar" },
                     new { valor = "2", texto = "Incompleto" },
                     new { valor = "4", texto = "Finalizado" }
                 },
-                "valor", "texto");
+                    "valor", "texto");
 
-            //_listaImagenes = await imagenesCodificador.ToArrayAsync();
+                int pageSize = 30;
+                _baseVM.FaseSel = fase ?? _fase;
+                ListaImagenesViewModel lista = new ListaImagenesViewModel(_baseVM, filter, await PaginatedList<Codificacion>.CreateAsync(imagenesCodificador.AsNoTracking(), page ?? 1, pageSize));
+                return View(lista);
 
-            int pageSize = 24;
-            return View(await PaginatedList<Codificacion>.CreateAsync(imagenesCodificador.AsNoTracking(), page ?? 1, pageSize, filter));
-
-            //return View(_listaImagenes);
+            }
+            else
+            {
+                return RedirectToAction("Logout", "Account");
+            }
         }
 
 
 
         // GET: Codificacion/Edit/5
-        public async Task<IActionResult> Edit(int materialId, int filter = -1)
+        public async Task<IActionResult> Edit(int? fase, int materialId, int filter = -1)
         {
-            getFaseCodificador();
-            
-            //var codificacion = await _context.Codificacion.SingleOrDefaultAsync(m => m.CodificadorId == codificadorId && m.FaseId == faseId && m.MaterialId == materialId);
-            var codificacion = await _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == _fase && c.MaterialId == materialId).Include(m => m.Material).SingleOrDefaultAsync();
+            await getFaseCodificador();
+            var codificacion = await _context.Codificacion.Where(c => c.CodificadorId == _codificador && c.FaseId == (fase ?? _fase) && c.MaterialId == materialId).Include(m => m.Material).SingleOrDefaultAsync();
 
             if (codificacion == null)
             {
                 return NotFound();
             }
 
-            CodificacionViewModel model = new CodificacionViewModel(codificacion, filter);
+            _baseVM.FaseSel = fase ?? _fase;
+            CodificacionViewModel model = new CodificacionViewModel(_baseVM, codificacion, filter);
 
-            Navigation item = await GetItem(_codificador, _fase, materialId, filter);
+            Navigation item = await GetItem(_codificador, (fase ?? _fase), materialId, filter);
 
             model.NextItem = item.Next;
             model.PrevItem = item.Previous;
@@ -126,12 +146,13 @@ namespace odaeWeb.Controllers
                 return NotFound();
             }
 
-            codificacion.UpdateEstado();
+            setFaseActual();
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && codificacion.FaseId == _fase )
             {
                 try
                 {
+                    codificacion.UpdateEstado();
                     Codificacion cd = codificacion.getCodificacion();
                     _context.Update(cd);
                     _context.Entry(cd).State = EntityState.Modified;

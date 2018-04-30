@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace odaeWeb.Models
 {
-    public class ResetPasswordViewModel
+    public class ResetPasswordViewModel : BaseViewModel
     {
         [Required(ErrorMessage = "Se debe introducir la contraseña.")]
         [StringLength(20, ErrorMessage = "La {0} debe tener mínimo de {2} y máximo de {1} caracteres.", MinimumLength = 6)]

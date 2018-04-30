@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace odaeWeb.Models
 {
-    public class ForgotPasswordViewModel
+    public class ForgotPasswordViewModel : BaseViewModel
     {
         [Required(ErrorMessage = "Se debe introducir el Usuario o Email.")]
         public string Username { get; set; }

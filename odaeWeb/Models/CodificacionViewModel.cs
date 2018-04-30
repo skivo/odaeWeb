@@ -7,15 +7,21 @@ using odaeWeb.Models.DB;
 
 namespace odaeWeb.Models
 {
-    public class CodificacionViewModel
+    public class CodificacionViewModel : BaseViewModel
     {
 
         public CodificacionViewModel()
         {
         }
 
-        public CodificacionViewModel(Codificacion codificacion, int filter)
+        public CodificacionViewModel(BaseViewModel baseVM, Codificacion codificacion, int filter)
         {
+            UserId = baseVM.UserId;
+            Perfil = baseVM.Perfil;
+            FaseActual = baseVM.FaseActual;
+            FaseSel = baseVM.FaseSel;
+            Fases = baseVM.Fases;
+
             CodificadorId = codificacion.CodificadorId;
             FaseId = codificacion.FaseId;
             MaterialId = codificacion.MaterialId;
@@ -41,6 +47,14 @@ namespace odaeWeb.Models
         }
 
 
+        public void UpdateBase(BaseViewModel baseVM)
+        {
+            UserId = baseVM.UserId;
+            Perfil = baseVM.Perfil;
+            FaseActual = baseVM.FaseActual;
+            FaseSel = baseVM.FaseSel;
+            Fases = baseVM.Fases;
+        }
 
 
         public void UpdateEstado()

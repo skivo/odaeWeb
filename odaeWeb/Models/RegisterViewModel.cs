@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace odaeWeb.Models
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : BaseViewModel
     {
         [Required]
         [StringLength(5, ErrorMessage = "El {0} debe tener {1} caracteres.", MinimumLength = 5)]

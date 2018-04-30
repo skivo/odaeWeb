@@ -3,6 +3,9 @@
 @{
     ViewData["Title"] = "Edit";
     string objetivoSel = "", htmlList = "";
+    int page = Model.Pos / 24 + ((Model.Pos % 24 > 0) ? 1 : 0);
+    bool activo = (Model.FaseSel == Model.FaseActual);
+
 }
 
 <div class="row" style="padding-top: 15px;">
@@ -16,11 +19,11 @@
                     }
                     else
                     {
-                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.PrevItem)" asp-route-filter="@(Model.Filtro)">❮</a>
+                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.PrevItem)" asp-route-fase="@(Model.FaseSel)" asp-route-filter="@(Model.Filtro)">❮</a>
                     }
                 </li>
                 <li class="page-item">
-                    <a class="page-link" asp-action="Index" asp-route-filter="@(Model.Filtro)">
+                    <a class="page-link" asp-action="Index" asp-route-page="@(page)" asp-route-fase="@(Model.FaseSel)" asp-route-filter="@(Model.Filtro)">
                         @(Model.Pos)&nbsp;/&nbsp;@Model.Total
                     </a>
                 </li>
@@ -31,13 +34,12 @@
                     }
                     else
                     {
-                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.NextItem)" asp-route-filter="@(Model.Filtro)">❯</a>
+                        <a class="page-link" asp-action="Edit" asp-route-materialId="@(Model.NextItem)" asp-route-fase="@(Model.FaseSel)" asp-route-filter="@(Model.Filtro)">❯</a>
                     }
                 </li>
             </ul>
         </div>
     </div>
-
 </div>
 
 <hr />
@@ -215,13 +217,13 @@
                         <input type="text" asp-for="CorreccionProfesor" style="display: none" />
                         <label asp-for="CorreccionProfesor"></label>
                         @if (Model.CorreccionProfesor == null)
-                        {
-                            <input type="checkbox" class="checknull"/>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="checknotnull" checked="@Model.CorreccionProfesor" />
-                        }
+            {
+                <input type="checkbox" class="checknull" />
+}
+else
+{
+            <input type="checkbox" class="checknotnull" checked="@Model.CorreccionProfesor" />
+}
                     </div>
                 </div>
 
@@ -230,13 +232,13 @@
                         <input type="text" asp-for="ErrorEjecucion" style="display: none" />
                         <label asp-for="ErrorEjecucion"></label>
                         @if (Model.ErrorEjecucion == null)
-                        {
-                            <input type="checkbox" class="checknull"/>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorEjecucion" />
-                        }
+            {
+                <input type="checkbox" class="checknull" />
+}
+else
+{
+            <input type="checkbox" class="checknotnull" checked="@Model.ErrorEjecucion" />
+}
                     </div>
                 </div>
                 <div class="col-xs-6 text-center">
@@ -244,13 +246,13 @@
                         <input type="text" asp-for="TrabajaDinero" style="display: none" />
                         <label asp-for="TrabajaDinero"></label>
                         @if (Model.TrabajaDinero == null)
-                        {
-                            <input type="checkbox" class="checknull"/>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="checknotnull" checked="@Model.TrabajaDinero" />
-                        }
+            {
+                <input type="checkbox" class="checknull" />
+}
+else
+{
+            <input type="checkbox" class="checknotnull" checked="@Model.TrabajaDinero" />
+}
                     </div>
                 </div>
 
@@ -259,13 +261,13 @@
                         <input type="text" asp-for="ErrorDiseno" style="display: none" />
                         <label asp-for="ErrorDiseno"></label>
                         @if (Model.ErrorDiseno == null)
-                        {
-                            <input type="checkbox" class="checknull"/>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorDiseno" />
-                        }
+            {
+                <input type="checkbox" class="checknull" />
+}
+else
+{
+            <input type="checkbox" class="checknotnull" checked="@Model.ErrorDiseno" />
+}
                     </div>
                 </div>
 
@@ -275,7 +277,10 @@
                     <span asp-validation-for="Observaciones" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                    @if (activo)
+        {
+            <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+}
                 </div>
             </div>
         </div>
@@ -360,6 +365,19 @@
 
         $(document).ready(function () {
             enableObjetivos();
+            var activo = '@activo';
+            if (activo == 'False') {
+                $(':checkbox').prop("disabled", "disabled");
+                $(':input').prop("readonly", true);
+                $('#selCurso').prop("disabled", "disabled");
+                $('#selEje').prop("disabled", "disabled");
+                $('#btn_objetivo').prop("disabled", "disabled");
+                $('#selTipoTarea').prop("disabled", "disabled");
+                $('#selHabilidad').prop("disabled", "disabled");
+                $('#selNivel').prop("disabled", "disabled");
+            }
+
+
         });
 
         $(function () {

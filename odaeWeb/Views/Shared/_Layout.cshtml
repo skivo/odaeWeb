@@ -1,4 +1,5 @@
-﻿@using System.Security.Claims
+﻿@model BaseViewModel
+@using System.Security.Claims
 @using odaeWeb.Helpers
 
 <!DOCTYPE html>
@@ -29,7 +30,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">fonide.odae.cl</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index" asp-  class="navbar-brand">fonide.odae.cl</a>
             </div>
             <div class="navbar-collapse collapse">
 
@@ -41,9 +42,43 @@
                         var rol = ((ClaimsIdentity)User.Identity).GetSpecificClaim(ClaimTypes.Role);
                         if (rol == "1" || rol == "2")
                         {
-                            <ul class="nav navbar-nav">
+                        <ul class="nav navbar-nav">
+                            @if (Model == null || Model.Fases == null)
+                            {
                                 <li><a asp-area="" asp-controller="Codificacion" asp-action="Index">Lista de imágenes</a></li>
-                            </ul>
+                            }
+                            else
+                            {
+                                @foreach (var item in Model.Fases)
+                                {
+                                    string nombreFase = item.NombreFase;
+                                    if (Model.FaseActual == item.FaseId)
+                                    {
+                                        nombreFase += "&nbsp;<span class='glyphicon glyphicon-pencil'></span>";
+                                    }
+                                    else
+                                    {
+                                        nombreFase += "&nbsp;<span class='glyphicon glyphicon-ok'></span>";
+                                    }
+                                    if (Model.FaseSel == item.FaseId)
+                                    {
+                                        <li class="nav-item active">
+                                            <a asp-area="" asp-controller="Codificacion" asp-action="Index" asp-route-fase="@(item.FaseId)">
+                                                @Html.Raw(nombreFase)
+                                            </a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li>
+                                            <a asp-area="" asp-controller="Codificacion" asp-action="Index" asp-route-fase="@(item.FaseId)">
+                                                @Html.Raw(nombreFase)
+                                            </a>
+                                        </li>
+                                    }
+                                }
+                            }
+                        </ul>
                             <ul class="nav navbar-nav navbar-right">
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">

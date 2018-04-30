@@ -1,4 +1,4 @@
-﻿@model IEnumerable<odaeWeb.Models.DB.UserFaseCodificador>
+﻿@model AdminIndexViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Codificador)
+                Codificador
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Fase)
+                Fase
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                Usuario
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.UserFaseCod) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Codificador.NombreCodificador)

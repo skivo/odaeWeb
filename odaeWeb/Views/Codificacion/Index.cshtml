@@ -1,4 +1,4 @@
-﻿@model PaginatedList<odaeWeb.Models.DB.Codificacion>
+﻿@model ListaImagenesViewModel
 
 @{
     ViewData["Title"] = "Imágenes";
@@ -7,11 +7,11 @@
 
     string numItems = "";
 
-    if (Model.TotalItems > 0)
+    if (Model.Lista.TotalItems > 0)
     {
-        int ini = 1 + (Model.PageSize * (Model.PageIndex - 1));
-        int fin = (Model.PageIndex == Model.TotalPages) ? Model.TotalItems : Model.PageIndex * Model.PageSize;
-        numItems = fin.ToString() + "&nbsp;/&nbsp;" + Model.TotalItems.ToString();
+        int ini = 1 + (Model.Lista.PageSize * (Model.Lista.PageIndex - 1));
+        int fin = (Model.Lista.PageIndex == Model.Lista.TotalPages) ? Model.Lista.TotalItems : Model.Lista.PageIndex * Model.Lista.PageSize;
+        numItems = fin.ToString() + "&nbsp;/&nbsp;" + Model.Lista.TotalItems.ToString();
         if (ini != fin)
         {
             numItems = ini.ToString() + "&hellip;" + numItems;
@@ -23,41 +23,42 @@
 
     <div class="col-md-3 col-xs-5">
         <form class="form-inline" asp-action="Index" method="get">
-            <select class="form-control" asp-for="filter" asp-items="ViewBag.Filtros" onchange="this.form.submit()"></select>
+            <input type="hidden" name="fase" value="@(Model.FaseSel)"/>
+            <select class="form-control" asp-for="Filter" asp-items="ViewBag.Filtros" onchange="this.form.submit()"></select>
             <label style="font-size:smaller; font-weight:500; color:slategray">&nbsp;@Html.Raw(numItems)</label>
         </form>
     </div>
-    @if (Model.TotalPages > 1)
+    @if (Model.Lista.TotalPages > 1)
     {
         <div class="col-md-9 col-xs-6 text-right">
             <div>
                 <ul class="pagination pagination-sm">
-                    @if (Model.PageIndex == 1)
+                    @if (Model.Lista.PageIndex == 1)
                     {
                         <li class="page-item disabled"><a class="page-link">❮</a></li>
                     }
                     else
                     {
-                        <li class="page-item"><a asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-filter="@Model.filter" class="page-link">❮</a></li>
+                        <li class="page-item"><a asp-action="Index" asp-route-page="@(Model.Lista.PageIndex - 1)" asp-route-fase="@Model.FaseSel" asp-route-filter="@Model.Filter" class="page-link">❮</a></li>
                     }
-                    @for (i = 1; i <= Model.TotalPages; i++)
+                    @for (i = 1; i <= Model.Lista.TotalPages; i++)
                     {
-                        if (Model.PageIndex == i)
+                        if (Model.Lista.PageIndex == i)
                         {
                             <li class="page-item active"><a class="page-link">@i</a></li>
                         }
                         else
                         {
-                            <li class="page-item "><a asp-action="Index" asp-route-page="@i" asp-route-filter="@Model.filter" class="page-link">@i</a></li>
+                            <li class="page-item "><a asp-action="Index" asp-route-page="@i" asp-route-fase="@Model.FaseSel" asp-route-filter="@Model.Filter" class="page-link">@i</a></li>
                         }
                     }
-                    @if (Model.PageIndex == Model.TotalPages)
+                    @if (Model.Lista.PageIndex == Model.Lista.TotalPages)
                     {
                         <li class="page-item disabled"><a class="page-link">❯</a></li>
                     }
                     else
                     {
-                        <li class="page-item"><a asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-filter="@Model.filter" class="page-link">❯</a></li>
+                        <li class="page-item"><a asp-action="Index" asp-route-page="@(Model.Lista.PageIndex + 1)" asp-route-fase="@Model.FaseSel" asp-route-filter="@Model.Filter" class="page-link">❯</a></li>
                     }
                 </ul>
             </div>
@@ -70,11 +71,11 @@
 
 <div class="container">
 
-    @foreach (var item in Model)
+    @foreach (var item in Model.Lista)
     {
         <div class="col-md-2 col-sm-3 col-xs-6 text-center">
             <div class="thumbnail" style="min-height: 180px">
-                <a href='@Url.Action("Edit", "Codificacion", new {MaterialId = item.MaterialId, filter = Model.filter })'>
+                <a href='@Url.Action("Edit", "Codificacion", new {materialId = item.MaterialId, fase = Model.FaseSel, filter = Model.Filter })'>
                     <img class="resaltar" src="~/images/m/thumbnails/@item.Material.FileName" alt="@item.Material.FileName">
                     <img style="position: absolute;top: 2px;right: 17px;" border="0" src="~/images/icons/@(item.Estado + ".png")" alt="">
                     <input id='index' type='hidden' value='@i' />

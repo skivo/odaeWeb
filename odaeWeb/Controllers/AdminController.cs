@@ -25,7 +25,7 @@ namespace odaeWeb.Controllers
         public async Task<IActionResult> Index()
         {
             var odaeDBContext = _context.UserFaseCodificador.Include(u => u.Codificador).Include(u => u.Fase).Include(u => u.User);
-            return View(await odaeDBContext.ToListAsync());
+            return View(new Models.AdminIndexViewModel { UserFaseCod = await odaeDBContext.ToListAsync() });
         }
 
         // GET: UserFaseCodificadors/Details/5
@@ -92,7 +92,8 @@ namespace odaeWeb.Controllers
                 return NotFound();
             }
             ViewData["FaseId"] = new SelectList(_context.Fase, "FaseId", "NombreFase", userFaseCodificador.FaseId);
-            return View(userFaseCodificador);
+
+            return View(new Models.UserFaseCodViewModel(userFaseCodificador));
         }
 
 
@@ -145,7 +146,7 @@ namespace odaeWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["FaseId"] = new SelectList(_context.Fase, "FaseId", "NombreFase", userFaseCodificador.FaseId);
-            return View(userFaseCodificador);
+            return View(new Models.UserFaseCodViewModel(userFaseCodificador));
         }
 
         // GET: UserFaseCodificadors/Delete/5
