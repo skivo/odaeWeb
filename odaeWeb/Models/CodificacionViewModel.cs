@@ -156,7 +156,7 @@ namespace odaeWeb.Models
         [Display(Name = "Error diseño")]
         public bool? ErrorDiseno { get; set; }
 
-        [StringLength(255, ErrorMessage = "{0} puede tener un máximo de {1} caracteres.")]
+        [StringLength(2000, ErrorMessage = "{0} puede tener un máximo de {1} caracteres.")]
         [Display(Name = "Observaciones")]
         public string Observaciones { get; set; }
 
