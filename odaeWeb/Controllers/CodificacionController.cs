@@ -139,7 +139,7 @@ namespace odaeWeb.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit([Bind("CodificadorId,FaseId,MaterialId,FileName,TieneDuplicado,NivelId,NivelComentario,CursoId,EjeId,ObjetivoId,ObjetivoComentario,HabilidadId,HabilidadComentario,TipoTareaId,TipoTareaComentario,CorreccionProfesor,ErrorEjecucion,TrabajaDinero,ErrorDiseno,Observaciones,Filtro")] CodificacionViewModel codificacion)
+        public async Task<IActionResult> Edit([Bind("CodificadorId,FaseId,MaterialId,FileName,TieneDuplicado,NivelId,NivelComentario,CursoId,EjeId,ObjetivoId,ObjetivoComentario,HabilidadId,HabilidadComentario,TipoTareaId,TipoTareaComentario,CorreccionProfesor,ErrorEjecucion,TrabajaDinero,ErrorDiseno,Observaciones,Filtro,Perfil")] CodificacionViewModel codificacion)
         {
             if (codificacion == null)
             {
@@ -148,7 +148,7 @@ namespace odaeWeb.Controllers
 
             setFaseActual();
 
-            if (ModelState.IsValid && codificacion.FaseId == _fase )
+            if (ModelState.IsValid && (codificacion.FaseId == _fase || codificacion.Perfil == 1) )
             {
                 try
                 {
@@ -170,7 +170,7 @@ namespace odaeWeb.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Edit), new { @materialId = codificacion.MaterialId, @filter = codificacion.Filtro });
+                return RedirectToAction(nameof(Edit), new { @materialId = codificacion.MaterialId, @fase = codificacion.FaseId, @filter = codificacion.Filtro });
                 
             }
 

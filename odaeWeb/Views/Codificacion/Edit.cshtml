@@ -4,8 +4,11 @@
     ViewData["Title"] = "Edit";
     string objetivoSel = "", htmlList = "";
     int page = Model.Pos / 24 + ((Model.Pos % 24 > 0) ? 1 : 0);
-    bool activo = (Model.FaseSel == Model.FaseActual);
-
+    bool activo = true;
+    if (Model.Perfil == 2)
+    {
+        activo = (Model.FaseSel == Model.FaseActual);
+    }
 }
 
 <div class="row" style="padding-top: 15px;">
@@ -112,15 +115,16 @@
                 <input type="hidden" asp-for="FileName" />
                 <input type="hidden" asp-for="TieneDuplicado" />
                 <input type="hidden" asp-for="Filtro" />
+                <input type="hidden" asp-for="Perfil" />
 
                 <div class="col-xs-4" style="padding-left: 0px; padding-right: 7px">
                     <div class="form-group">
                         <label asp-for="CursoId" class="control-label"></label>
                         <select id="selCurso" asp-for="CursoId" class="form-control" asp-items="ViewBag.CursoId">
                             @if (Model.CursoId == null)
-                {
-                    <option value="">Seleccionar...</option>
-    }
+                            {
+                                <option value="">Seleccionar...</option>
+                            }
                         </select>
                         <span asp-validation-for="CursoId" class="text-danger"></span>
                     </div>
@@ -130,31 +134,31 @@
                         <label asp-for="EjeId" class="control-label"></label>
                         <select id="selEje" asp-for="EjeId" class="form-control" asp-items="ViewBag.EjeId">
                             @if (Model.EjeId == null)
-                {
-                    <option value="">Seleccionar...</option>
-    }
+                            {
+                                <option value="">Seleccionar...</option>
+                            }
                         </select>
                         <span asp-validation-for="EjeId" class="text-danger"></span>
                     </div>
                 </div>
 
                 @{
-        var objetivos = ViewData["ObjetivoId"] as SelectList;
-        if (objetivos != null)
-        {
-            if (Model.ObjetivoId == null)
-            {
-                objetivoSel = "Seleccionar...";
-            }
-            foreach (var item in objetivos)
-            {
-                if (Model.ObjetivoId != null && item.Value == Model.ObjetivoId.ToString())
-                {
-                    objetivoSel = item.Value + ". " + item.Text;
-                }
-                htmlList += "<li><a class='objetivo' href='#' data-value='" + item.Value + "'>" + item.Value + ". " + item.Text + "</a></li>";
-            }
-        }
+                    var objetivos = ViewData["ObjetivoId"] as SelectList;
+                    if (objetivos != null)
+                    {
+                        if (Model.ObjetivoId == null)
+                        {
+                            objetivoSel = "Seleccionar...";
+                        }
+                        foreach (var item in objetivos)
+                        {
+                            if (Model.ObjetivoId != null && item.Value == Model.ObjetivoId.ToString())
+                            {
+                                objetivoSel = item.Value + ". " + item.Text;
+                            }
+                            htmlList += "<li><a class='objetivo' href='#' data-value='" + item.Value + "'>" + item.Value + ". " + item.Text + "</a></li>";
+                        }
+                    }
                 }
 
                 <div class="form-group">
@@ -177,9 +181,9 @@
                     <label asp-for="TipoTareaId" class="control-label"></label>
                     <select id="selTipoTarea" asp-for="TipoTareaId" class="form-control" asp-items="ViewBag.TipoTareaId">
                         @if (Model.TipoTareaId == null)
-            {
-                <option value="">Seleccionar...</option>
-}
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
                     </select>
                     <span asp-validation-for="TipoTareaId" class="text-danger"></span>
 
@@ -189,9 +193,9 @@
                     <label asp-for="HabilidadId" class="control-label"></label>
                     <select id="selHabilidad" asp-for="HabilidadId" class="form-control" asp-items="ViewBag.HabilidadId">
                         @if (Model.HabilidadId == null)
-            {
-                <option value="">Seleccionar...</option>
-}
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
                     </select>
                     <span asp-validation-for="HabilidadId" class="text-danger"></span>
 
@@ -202,9 +206,9 @@
                     <label asp-for="NivelId" class="control-label"></label>
                     <select id="selNivel" asp-for="NivelId" class="form-control" asp-items="ViewBag.NivelId">
                         @if (Model.NivelId == null)
-            {
-                <option value="">Seleccionar...</option>
-}
+                        {
+                            <option value="">Seleccionar...</option>
+                        }
                     </select>
                     <span asp-validation-for="NivelId" class="text-danger"></span>
 
@@ -217,13 +221,13 @@
                         <input type="text" asp-for="CorreccionProfesor" style="display: none" />
                         <label asp-for="CorreccionProfesor"></label>
                         @if (Model.CorreccionProfesor == null)
-            {
-                <input type="checkbox" class="checknull" />
-}
-else
-{
-            <input type="checkbox" class="checknotnull" checked="@Model.CorreccionProfesor" />
-}
+                        {
+                            <input type="checkbox" class="checknull" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.CorreccionProfesor" />
+                        }
                     </div>
                 </div>
 
@@ -232,13 +236,13 @@ else
                         <input type="text" asp-for="ErrorEjecucion" style="display: none" />
                         <label asp-for="ErrorEjecucion"></label>
                         @if (Model.ErrorEjecucion == null)
-            {
-                <input type="checkbox" class="checknull" />
-}
-else
-{
-            <input type="checkbox" class="checknotnull" checked="@Model.ErrorEjecucion" />
-}
+                        {
+                            <input type="checkbox" class="checknull" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorEjecucion" />
+                        }
                     </div>
                 </div>
                 <div class="col-xs-6 text-center">
@@ -246,13 +250,13 @@ else
                         <input type="text" asp-for="TrabajaDinero" style="display: none" />
                         <label asp-for="TrabajaDinero"></label>
                         @if (Model.TrabajaDinero == null)
-            {
-                <input type="checkbox" class="checknull" />
-}
-else
-{
-            <input type="checkbox" class="checknotnull" checked="@Model.TrabajaDinero" />
-}
+                        {
+                            <input type="checkbox" class="checknull" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.TrabajaDinero" />
+                        }
                     </div>
                 </div>
 
@@ -261,13 +265,13 @@ else
                         <input type="text" asp-for="ErrorDiseno" style="display: none" />
                         <label asp-for="ErrorDiseno"></label>
                         @if (Model.ErrorDiseno == null)
-            {
-                <input type="checkbox" class="checknull" />
-}
-else
-{
-            <input type="checkbox" class="checknotnull" checked="@Model.ErrorDiseno" />
-}
+                        {
+                            <input type="checkbox" class="checknull" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="checknotnull" checked="@Model.ErrorDiseno" />
+                        }
                     </div>
                 </div>
 
@@ -278,9 +282,9 @@ else
                 </div>
                 <div class="form-group">
                     @if (activo)
-        {
-            <input type="submit" value="Guardar cambios" class="btn btn-primary" />
-}
+                    {
+                        <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+                    }
                 </div>
             </div>
         </div>
