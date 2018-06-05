@@ -26,6 +26,7 @@ namespace odaeWeb.Models.DB
         public string Observaciones { get; set; }
         public int Estado { get; set; }
         public int RowIndex { get; set; }
+        public DateTime? LastUpdated { get; set; }
 
         public Codificador Codificador { get; set; }
         public Fase Fase { get; set; }

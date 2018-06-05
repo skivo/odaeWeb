@@ -154,6 +154,7 @@ namespace odaeWeb.Controllers
                 {
                     codificacion.UpdateEstado();
                     Codificacion cd = codificacion.getCodificacion();
+                    cd.LastUpdated = DateTime.Now;
                     _context.Update(cd);
                     _context.Entry(cd).State = EntityState.Modified;
                     _context.Entry(cd).Property(o => o.RowIndex).IsModified = false;
