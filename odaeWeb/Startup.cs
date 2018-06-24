@@ -57,7 +57,8 @@ namespace odaeWeb
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                var options = new RewriteOptions().AddRedirectToHttpsPermanent();
+                //var options = new RewriteOptions().AddRedirectToHttpsPermanent();
+                var options = new RewriteOptions().Add(new RedirectRules());
                 app.UseRewriter(options);
             }
 
@@ -69,8 +70,6 @@ namespace odaeWeb
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-
-
 
         }
     }
