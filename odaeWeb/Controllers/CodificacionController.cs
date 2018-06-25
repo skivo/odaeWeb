@@ -61,8 +61,23 @@ namespace odaeWeb.Controllers
                     Perfil = perfil,
                     FaseActual = _fase,
                     FaseSel = _fase,
-                    Fases = await _context.Fase.Where(a => a.FaseActiva == true).OrderByDescending(x => x.FaseId).ToListAsync()
+
                 };
+
+                if (perfil == 1)
+                {
+                    _baseVM.Fases = await _context.Fase.Where(a => a.FaseActiva == true).OrderByDescending(x => x.FaseId).ToListAsync();
+                }
+                else
+                {
+                    string sql = "SELECT DISTINCT Codificacion.FaseID, Fase.NombreFase, Fase.DescripcionFase, Fase.FaseActiva FROM Codificacion " +
+                                 "INNER JOIN Fase ON Codificacion.FaseID = Fase.FaseID " +
+                                 "WHERE CodificadorID = " + _codificador.ToString() + " ORDER BY FaseID DESC";
+
+                    var fases = await _context.Fase.FromSql(sql).ToListAsync();
+                    _baseVM.Fases = fases;
+                }
+
                 return true;
             }
             return false;

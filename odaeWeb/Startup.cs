@@ -11,6 +11,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
+using System.IO;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http;
 
 namespace odaeWeb
 {
@@ -46,7 +50,6 @@ namespace odaeWeb
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
 
-
             app.UseAuthentication();
 
             if (env.IsDevelopment())
@@ -63,6 +66,13 @@ namespace odaeWeb
             }
 
             app.UseStaticFiles();
+
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @".well-known")),
+                RequestPath = new PathString("/.well-known"),
+                ServeUnknownFileTypes = true // serve extensionless file
+            });
 
             app.UseMvc(routes =>
             {
